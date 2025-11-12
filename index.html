@@ -1,30 +1,36 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+
+<!-- 🔥 controla o zoom inicial e impede que o Safari aumente automaticamente -->
+<meta name="viewport" content="width=device-width, initial-scale=0.85, maximum-scale=0.85, user-scalable=no" />
+
 <title>Linha do Tempo Interativa</title>
 
 <style>
-  /* ===== RESET GLOBAL ===== */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* 🔥 scroll suave no iOS */
+    scroll-behavior: smooth;
+    background: transparent;
+    font-family: "Poppins", sans-serif;
+    color: #fff;
   }
 
   body {
-    font-family: "Poppins", sans-serif;
-    background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
-    color: #fff;
-    padding: 5vh 5vw;
-    overflow-x: hidden;
+    padding: 6vh 4vw;
+    min-height: 1800px; /* 🔥 força altura pro scroll funcionar */
   }
 
-  /* ===== TÍTULO ===== */
   h2 {
     text-align: center;
-    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-size: clamp(1.6rem, 2.8vw, 2.4rem);
     margin-bottom: 6vh;
     color: #fd7014;
     text-transform: uppercase;
@@ -33,9 +39,9 @@
   }
 
   h2::after {
-    content: '';
+    content: "";
     position: absolute;
-    bottom: -12px;
+    bottom: -10px;
     left: 50%;
     transform: translateX(-50%);
     width: 80px;
@@ -44,131 +50,121 @@
     border-radius: 4px;
   }
 
-  /* ===== TIMELINE ===== */
   .timeline {
     position: relative;
     max-width: 1100px;
-    margin: auto;
-    padding: 4vh 0;
+    margin: 0 auto;
+    padding: 2vh 0;
   }
 
-  /* Linha central */
   .timeline::before {
-    content: '';
+    content: "";
     position: absolute;
-    width: 4px;
+    width: 3px;
     background: linear-gradient(180deg, #fd7014, #ffb84d);
     top: 0;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    animation: lineGlow 3s ease-in-out infinite alternate;
+    animation: glow 3s ease-in-out infinite alternate;
   }
 
-  @keyframes lineGlow {
-    0% { box-shadow: 0 0 10px #fd7014; }
-    100% { box-shadow: 0 0 25px #ffb84d; }
+  @keyframes glow {
+    from { box-shadow: 0 0 10px #fd7014; }
+    to { box-shadow: 0 0 25px #ffb84d; }
   }
 
-  /* ===== BLOCO ===== */
   .timeline-block {
     position: relative;
     width: 50%;
-    padding: 3vh 3vw;
+    padding: 2vh 3vw;
     opacity: 0;
-    transform: translateY(80px);
-    transition: all 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transform: translateY(80px) scale(0.95);
+    transition: all 1s ease-out;
   }
+
+  .timeline-block:nth-child(odd) { left: 0; text-align: right; }
+  .timeline-block:nth-child(even) { left: 50%; text-align: left; }
 
   .timeline-block.show {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 
-  .timeline-block:nth-child(odd) {
-    left: 0;
-    text-align: right;
-    transform: translateX(-5vw);
-  }
-
-  .timeline-block:nth-child(even) {
-    left: 50%;
-    text-align: left;
-    transform: translateX(5vw);
-  }
-
-  .timeline-block.show:nth-child(odd),
-  .timeline-block.show:nth-child(even) {
-    transform: translateX(0);
-  }
-
-  /* ===== CONTEÚDO ===== */
   .content {
     background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.15);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 16px;
-    padding: 2vh 2vw;
+    padding: 1.8em 2em;
     display: inline-block;
-    max-width: 80%;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    word-wrap: break-word;
+    max-width: 90%;
+    line-height: 1.6;
+    position: relative;
+    transition: all 0.5s ease;
   }
 
   .content:hover {
     transform: translateY(-6px) scale(1.03);
-    box-shadow: 0 8px 25px rgba(253,112,20,0.4);
+    box-shadow: 0 10px 25px rgba(253, 112, 20, 0.35);
+    border-color: rgba(253, 112, 20, 0.4);
   }
 
-  .content h3 {
-    margin-bottom: 8px;
-    color: #fd7014;
-    font-size: clamp(1.1rem, 2vw, 1.4rem);
+  .content h3 { margin-bottom: 6px; color: #fd7014; font-size: clamp(1rem, 1.5vw, 1.2rem); }
+  .content span { font-size: clamp(0.85rem, 1.3vw, 1rem); color: #ccc; }
+  .content p { margin-top: 8px; font-size: clamp(0.8rem, 1.4vw, 0.95rem); color: #f5f5f5; }
+
+  .timeline-block:nth-child(odd).show .content { animation: slideLeft 0.9s ease-out forwards; }
+  .timeline-block:nth-child(even).show .content { animation: slideRight 0.9s ease-out forwards; }
+
+  @keyframes slideLeft {
+    from { transform: translateX(60px) scale(0.95); opacity: 0; }
+    to { transform: translateX(0) scale(1); opacity: 1; }
+  }
+  @keyframes slideRight {
+    from { transform: translateX(-60px) scale(0.95); opacity: 0; }
+    to { transform: translateX(0) scale(1); opacity: 1; }
   }
 
-  .content span {
-    font-size: clamp(0.8rem, 1.5vw, 1rem);
-    color: #ccc;
-  }
-
-  .content p {
-    margin-top: 10px;
-    font-size: clamp(0.9rem, 1.8vw, 1rem);
-    color: #eee;
-    line-height: 1.6;
-  }
-
-  /* ===== RESPONSIVO ===== */
+  /* ===== Responsividade ===== */
   @media (max-width: 992px) {
-    .timeline-block {
-      width: 100%;
-      padding: 3vh 2vw;
-      text-align: left !important;
-    }
-
-    .timeline::before {
-      left: 20px;
-    }
-
-    .content {
-      max-width: 100%;
-      margin-left: 40px;
-    }
+    .timeline::before { left: 12px; transform: none; }
+    .timeline-block { width: 100%; left: 0 !important; text-align: left !important; padding: 3vh 0; }
+    .content { max-width: 92%; margin-left: 38px; }
   }
 
-  @media (max-width: 576px) {
-    body {
-      padding: 4vh 4vw;
+  @media (max-width: 768px) {
+    html, body { height: auto; min-height: 1800px; }
+    .timeline::before { left: 8px; }
+    .content { margin-left: 32px; padding: 1.4em 1.6em; border-radius: 14px; max-width: 94%; }
+  }
+
+  @media (max-width: 480px) {
+    html, body {
+      height: auto;
+      min-height: 2000px;
+      overflow-y: auto;
+      zoom: 0.9; /* 🔥 reduz zoom no celular */
     }
 
-    .timeline::before {
-      left: 10px;
-    }
-
+    h2 { font-size: 1.3rem; margin-bottom: 4vh; }
+    .timeline::before { left: 6px; }
     .content {
-      padding: 4vw;
-      margin-left: 30px;
+      margin-left: 25px;
+      max-width: 94%;
+      padding: 1.2em 1.3em;
+      border-radius: 10px;
     }
+
+    .content h3 { font-size: 1rem; }
+    .content p, .content span { font-size: 0.85rem; }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body { color: #fff; background: transparent; }
+    .content { background: rgba(0, 0, 0, 0.35); border-color: rgba(255, 255, 255, 0.1); }
+    h2 { color: #ff8c26; }
+    .timeline::before { background: linear-gradient(180deg, #ff8c26, #ffd27f); }
   }
 </style>
 </head>
@@ -177,75 +173,17 @@
 <h2>Minha Trajetória</h2>
 
 <div class="timeline">
-
-  <div class="timeline-block">
-    <div class="content">
-      <h3>Início da Jornada</h3>
-      <span>Jan 2020</span>
-      <p>O começo de uma trajetória cheia de desafios e aprendizados.</p>
-    </div>
-  </div>
-
-  <div class="timeline-block">
-    <div class="content">
-      <h3>Primeira Conquista</h3>
-      <span>Jun 2020</span>
-      <p>Um marco importante, consolidando o início de grandes projetos.</p>
-    </div>
-  </div>
-
-  <div class="timeline-block">
-    <div class="content">
-      <h3>Expansão de Conhecimento</h3>
-      <span>Dez 2020</span>
-      <p>Investindo em novas habilidades e explorando novas oportunidades.</p>
-    </div>
-  </div>
-
-  <div class="timeline-block">
-    <div class="content">
-      <h3>Projeto de Destaque</h3>
-      <span>Mai 2021</span>
-      <p>Um dos maiores projetos realizados até o momento, com grande impacto.</p>
-    </div>
-  </div>
-
-  <div class="timeline-block">
-    <div class="content">
-      <h3>Reconhecimento</h3>
-      <span>Out 2021</span>
-      <p>Recebendo reconhecimento pelo trabalho e dedicação contínua.</p>
-    </div>
-  </div>
-
-  <div class="timeline-block">
-    <div class="content">
-      <h3>Nova Etapa</h3>
-      <span>Mar 2022</span>
-      <p>Início de um novo ciclo com desafios mais complexos e inspiradores.</p>
-    </div>
-  </div>
-
-  <div class="timeline-block">
-    <div class="content">
-      <h3>Inovação Constante</h3>
-      <span>Set 2022</span>
-      <p>Adotando novas tecnologias e metodologias para evoluir ainda mais.</p>
-    </div>
-  </div>
-
-  <div class="timeline-block">
-    <div class="content">
-      <h3>Futuro Brilhante</h3>
-      <span>Jan 2023</span>
-      <p>Com grandes conquistas, o futuro se mostra ainda mais promissor.</p>
-    </div>
-  </div>
-
+  <div class="timeline-block"><div class="content"><h3>Início da Jornada</h3><span>Jan 2020</span><p>O começo de uma trajetória cheia de desafios e aprendizados.</p></div></div>
+  <div class="timeline-block"><div class="content"><h3>Primeira Conquista</h3><span>Jun 2020</span><p>Um marco importante, consolidando o início de grandes projetos.</p></div></div>
+  <div class="timeline-block"><div class="content"><h3>Expansão de Conhecimento</h3><span>Dez 2020</span><p>Investindo em novas habilidades e explorando novas oportunidades.</p></div></div>
+  <div class="timeline-block"><div class="content"><h3>Projeto de Destaque</h3><span>Mai 2021</span><p>Um dos maiores projetos realizados até o momento, com grande impacto.</p></div></div>
+  <div class="timeline-block"><div class="content"><h3>Reconhecimento</h3><span>Out 2021</span><p>Recebendo reconhecimento pelo trabalho e dedicação contínua.</p></div></div>
+  <div class="timeline-block"><div class="content"><h3>Nova Etapa</h3><span>Mar 2022</span><p>Início de um novo ciclo com desafios mais complexos e inspiradores.</p></div></div>
+  <div class="timeline-block"><div class="content"><h3>Inovação Constante</h3><span>Set 2022</span><p>Adotando novas tecnologias e metodologias para evoluir ainda mais.</p></div></div>
+  <div class="timeline-block"><div class="content"><h3>Futuro Brilhante</h3><span>Jan 2023</span><p>Com grandes conquistas, o futuro se mostra ainda mais promissor.</p></div></div>
 </div>
 
 <script>
-  // Animação suave ao rolar
   const blocks = document.querySelectorAll('.timeline-block');
 
   function revealOnScroll() {
@@ -253,10 +191,12 @@
     blocks.forEach(block => {
       const boxTop = block.getBoundingClientRect().top;
       if (boxTop < triggerBottom) block.classList.add('show');
+      else block.classList.remove('show');
     });
   }
 
-  window.addEventListener('scroll', revealOnScroll);
+  window.addEventListener('scroll', revealOnScroll, { passive: true });
+  window.addEventListener('load', revealOnScroll);
   revealOnScroll();
 </script>
 
