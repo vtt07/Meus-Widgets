@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Linha do Tempo</title>
+<title>Linha do Tempo Interativa</title>
 <style>
   body {
     font-family: 'Segoe UI', sans-serif;
@@ -14,24 +14,30 @@
 
   h2 {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 60px;
     color: #fd7014;
-    font-size: 28px;
+    font-size: 32px;
+    font-weight: bold;
+    position: relative;
+    z-index: 2;
   }
 
   .timeline {
     position: relative;
-    max-width: 800px;
+    max-width: 900px;
     margin: auto;
- ::before {
+  }
+
+  .timeline::before {
     content: '';
     position: absolute;
     width: 4px;
     background: #fd7014;
-    top: 0;
+    top: 100px; /* abaixo do título */
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
+    z-index: 1;
   }
 
   .timeline-item {
@@ -39,14 +45,14 @@
     width: 50%;
     padding: 20px;
     opacity: 0;
-    transform: translateY(60px);
+    transform: translateY(80px) scale(0.95);
     transition: all 0.8s ease-out;
+    z-index: 2;
   }
 
   .timeline-item.show {
     opacity: 1;
-    transform: translateY(0);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+    transform: translateY(0) scale(1);
   }
 
   .timeline-item:nth-child(odd) {
@@ -65,7 +71,13 @@
     border-radius: 12px;
     box-shadow: 0 6px 15px rgba(0,0,0,0.15);
     display: inline-block;
-    max-width: 90%;
+    max-width: 80%;
+    transition: transform 0.3s ease;
+  }
+
+  .content:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.25);
   }
 
   .content h3 {
@@ -90,27 +102,15 @@
 
 <h2>Minha Trajetória</h2>
 <div class="timeline">
-  <div class="timeline-item">
-    <div class="content">
-      <h3>Título 1</h3>
-      <span>Jan 2020</span>
-      <p>Breve descrição do marco importante na sua trajetória.</p>
-    </div>
-  </div>
-  <div class="timeline-item">
-    <div class="content">
-      <h3>Título 2</h3>
-      <span>Dez 2021</span>
-      <p>Outro marco importante com detalhes relevantes.</p>
-    </div>
-  </div>
-  <div class="timeline-item">
-    <div class="content">
-      <h3>Título 3</h3>
-      <span>Ago 2023</span>
-      <p>Mais um passo importante na sua jornada.</p>
-    </div>
-  </div>
+  <!-- 8 balões -->
+  <div class="timeline-item"><div class="content"><h3>Título 1</h3><span>Jan 2020</span><p>Descrição breve do marco importante.</p></div></div>
+  <div class="timeline-item"><div class="content"><h3>Título 2</h3><span>Jun 2020</span><p>Outro marco relevante.</p></div></div>
+  <div class="timeline-item"><div class="content"><h3>Título 3</h3><span>Dez 2020</span><p>Mais um passo importante.</p></div></div>
+  <div class="timeline-item"><div class="content"><h3>Título 4</h3><span>Mai 2021</span><p>Conquista significativa.</p></div></div>
+  <div class="timeline-item"><div class="content"><h3>Título 5</h3><span>Out 2021</span><p>Avanço na trajetória.</p></div></div>
+  <div class="timeline-item"><div class="content"><h3>Título 6</h3><span>Mar 2022</span><p>Nova etapa importante.</p></div></div>
+  <div class="timeline-item"><div class="content"><h3>Título 7</h3><span>Set 2022</span><p>Outro marco relevante.</p></div></div>
+  <div class="timeline-item"><div class="content"><h3>Título 8</h3><span>Jan 2023</span><p>Última conquista destacada.</p></div></div>
 </div>
 
 <script>
@@ -122,6 +122,8 @@
       const boxTop = item.getBoundingClientRect().top;
       if (boxTop < triggerBottom) {
         item.classList.add('show');
+      } else {
+        item.classList.remove('show'); // Remove quando sai da tela (interativo)
       }
     });
   };
