@@ -3,10 +3,13 @@
 <head>
 <meta charset="UTF-8" />
 
-<!-- 🔥 controla o zoom inicial e impede que o Safari aumente automaticamente -->
+<!-- Meta viewport -->
 <meta name="viewport" content="width=device-width, initial-scale=0.85, maximum-scale=0.85, user-scalable=no" />
 
 <title>Linha do Tempo Interativa</title>
+
+<!-- Fonte moderna do Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -16,22 +19,22 @@
     height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch; /* 🔥 scroll suave no iOS */
+    -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
     background: transparent;
-    font-family: "Poppins", sans-serif;
+    font-family: "Inter", sans-serif; /* Fonte moderna */
     color: #fff;
   }
 
   body {
     padding: 6vh 4vw;
-    min-height: 1800px; /* 🔥 força altura pro scroll funcionar */
+    min-height: 2200px;
   }
 
   h2 {
     text-align: center;
     font-size: clamp(1.6rem, 2.8vw, 2.4rem);
-    margin-bottom: 6vh;
+    margin-bottom: 5vh; /* 👈 reduzido para aproximar balões */
     color: #fd7014;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -74,17 +77,27 @@
     to { box-shadow: 0 0 25px #ffb84d; }
   }
 
+  /* BLOCO MAIS PRÓXIMO */
   .timeline-block {
     position: relative;
-    width: 50%;
-    padding: 2vh 3vw;
+    padding: 1.5vh 3vw; /* 👈 menos padding vertical */
+    margin-bottom: 2vh;  /* 👈 adiciona leve separação vertical */
     opacity: 0;
-    transform: translateY(80px) scale(0.95);
+    transform: translateY(60px) scale(0.95);
     transition: all 1s ease-out;
   }
 
-  .timeline-block:nth-child(odd) { left: 0; text-align: right; }
-  .timeline-block:nth-child(even) { left: 50%; text-align: left; }
+  .timeline-block:nth-child(odd) {
+    left: 0;
+    width: 48%;
+    text-align: right;
+  }
+
+  .timeline-block:nth-child(even) {
+    left: 52%;
+    width: 48%;
+    text-align: left;
+  }
 
   .timeline-block.show {
     opacity: 1;
@@ -96,10 +109,10 @@
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 16px;
-    padding: 1.8em 2em;
+    padding: 1.6em 2em; /* 👈 ligeiramente menor */
     display: inline-block;
-    max-width: 90%;
-    line-height: 1.6;
+    max-width: 95%;
+    line-height: 1.5;
     position: relative;
     transition: all 0.5s ease;
   }
@@ -110,9 +123,9 @@
     border-color: rgba(253, 112, 20, 0.4);
   }
 
-  .content h3 { margin-bottom: 6px; color: #fd7014; font-size: clamp(1rem, 1.5vw, 1.2rem); }
+  .content h3 { margin-bottom: 6px; color: #fd7014; font-size: clamp(1rem, 1.5vw, 1.2rem); font-weight: 600; }
   .content span { font-size: clamp(0.85rem, 1.3vw, 1rem); color: #ccc; }
-  .content p { margin-top: 8px; font-size: clamp(0.8rem, 1.4vw, 0.95rem); color: #f5f5f5; }
+  .content p { margin-top: 6px; font-size: clamp(0.8rem, 1.4vw, 0.95rem); color: #f5f5f5; }
 
   .timeline-block:nth-child(odd).show .content { animation: slideLeft 0.9s ease-out forwards; }
   .timeline-block:nth-child(even).show .content { animation: slideRight 0.9s ease-out forwards; }
@@ -121,15 +134,16 @@
     from { transform: translateX(60px) scale(0.95); opacity: 0; }
     to { transform: translateX(0) scale(1); opacity: 1; }
   }
+
   @keyframes slideRight {
     from { transform: translateX(-60px) scale(0.95); opacity: 0; }
     to { transform: translateX(0) scale(1); opacity: 1; }
   }
 
-  /* ===== Responsividade ===== */
+  /* RESPONSIVIDADE */
   @media (max-width: 992px) {
     .timeline::before { left: 12px; transform: none; }
-    .timeline-block { width: 100%; left: 0 !important; text-align: left !important; padding: 3vh 0; }
+    .timeline-block { width: 100%; left: 0 !important; text-align: left !important; padding: 2vh 0; margin-bottom: 2vh; }
     .content { max-width: 92%; margin-left: 38px; }
   }
 
@@ -142,19 +156,14 @@
   @media (max-width: 480px) {
     html, body {
       height: auto;
-      min-height: 2000px;
+      min-height: 2200px;
       overflow-y: auto;
-      zoom: 0.9; /* 🔥 reduz zoom no celular */
+      zoom: 0.85;
     }
 
     h2 { font-size: 1.3rem; margin-bottom: 4vh; }
     .timeline::before { left: 6px; }
-    .content {
-      margin-left: 25px;
-      max-width: 94%;
-      padding: 1.2em 1.3em;
-      border-radius: 10px;
-    }
+    .content { margin-left: 25px; max-width: 96%; padding: 1.2em 1.3em; border-radius: 10px; }
 
     .content h3 { font-size: 1rem; }
     .content p, .content span { font-size: 0.85rem; }
