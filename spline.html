@@ -3,22 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meu Projeto Spline</title>
+  <title>Projeto 3D Spline</title>
   <style>
     html, body {
       margin: 0;
       height: 100%;
-      overflow: hidden;
-      background: #000; /* opcional */
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      position: relative;
+      width: 100%;
+      max-width: 1000px;
+      aspect-ratio: 16/9;
     }
     iframe {
-      border: none;
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
+      border: none;
     }
   </style>
 </head>
 <body>
-  <iframe src="https://prod.spline.design/qpaj5t6jPtcKBpqx/scene.splinecode" allow="autoplay; fullscreen"></iframe>
+  <div class="container">
+    <iframe 
+      src="https://my.spline.design/untitled-65c6cac47efe9324160e84c979028160/"
+      allow="autoplay; fullscreen">
+    </iframe>
+  </div>
 </body>
 </html>
