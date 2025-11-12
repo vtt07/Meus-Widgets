@@ -4,154 +4,257 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Linha do Tempo Interativa</title>
+
 <style>
-  body {
-    font-family: 'Segoe UI', sans-serif;
-    background: transparent;
+  /* ===== RESET GLOBAL ===== */
+  * {
     margin: 0;
-    padding: 40px;
+    padding: 0;
+    box-sizing: border-box;
   }
 
+  body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+    color: #fff;
+    padding: 5vh 5vw;
+    overflow-x: hidden;
+  }
+
+  /* ===== TÍTULO ===== */
   h2 {
     text-align: center;
-    margin-bottom: 60px;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    margin-bottom: 6vh;
     color: #fd7014;
-    font-size: 32px;
-    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
     position: relative;
-    z-index: 2;
   }
 
+  h2::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, #fd7014, #ffb84d);
+    border-radius: 4px;
+  }
+
+  /* ===== TIMELINE ===== */
   .timeline {
     position: relative;
-    max-width: 900px;
+    max-width: 1100px;
     margin: auto;
+    padding: 4vh 0;
   }
 
   /* Linha central */
   .timeline::before {
     content: '';
-    */
+    position: absolute;
+    width: 4px;
+    background: linear-gradient(180deg, #fd7014, #ffb84d);
+    top: 0;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 1;
+    animation: lineGlow 3s ease-in-out infinite alternate;
   }
 
-  /* Bolinhas */
-  .circle {
-    width: 18px;
-    height: 18px;
-    background: #fd7014;
-    border-radius: 50%;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2;
+  @keyframes lineGlow {
+    0% { box-shadow: 0 0 10px #fd7014; }
+    100% { box-shadow: 0 0 25px #ffb84d; }
   }
 
-  .timeline-item {
+  /* ===== BLOCO ===== */
+  .timeline-block {
     position: relative;
     width: 50%;
-    padding: 20px;
+    padding: 3vh 3vw;
     opacity: 0;
-    transform: translateY(80px) scale(0.95);
-    transition: all 0.8s ease-out;
-    z-index: 2;
+    transform: translateY(80px);
+    transition: all 1s cubic-bezier(0.25, 0.8, 0.25, 1);
   }
 
-  .timeline-item.show {
+  .timeline-block.show {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 
-  .timeline-item:nth-child(odd) {
+  .timeline-block:nth-child(odd) {
     left: 0;
     text-align: right;
+    transform: translateX(-5vw);
   }
 
-  .timeline-item:nth-child(even) {
+  .timeline-block:nth-child(even) {
     left: 50%;
     text-align: left;
+    transform: translateX(5vw);
   }
 
+  .timeline-block.show:nth-child(odd),
+  .timeline-block.show:nth-child(even) {
+    transform: translateX(0);
+  }
+
+  /* ===== CONTEÚDO ===== */
   .content {
-    background: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 16px;
+    padding: 2vh 2vw;
     display: inline-block;
     max-width: 80%;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    word-wrap: break-word;
   }
 
   .content:hover {
-    transform: scale(1.05);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 8px 25px rgba(253,112,20,0.4);
   }
 
   .content h3 {
-    margin: 0;
+    margin-bottom: 8px;
     color: #fd7014;
-    font-size: 20px;
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
   }
 
   .content span {
-    font-size: 14px;
-    color: #777;
+    font-size: clamp(0.8rem, 1.5vw, 1rem);
+    color: #ccc;
   }
 
   .content p {
     margin-top: 10px;
-    color: #555;
-    font-size: 15px;
+    font-size: clamp(0.9rem, 1.8vw, 1rem);
+    color: #eee;
+    line-height: 1.6;
+  }
+
+  /* ===== RESPONSIVO ===== */
+  @media (max-width: 992px) {
+    .timeline-block {
+      width: 100%;
+      padding: 3vh 2vw;
+      text-align: left !important;
+    }
+
+    .timeline::before {
+      left: 20px;
+    }
+
+    .content {
+      max-width: 100%;
+      margin-left: 40px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    body {
+      padding: 4vh 4vw;
+    }
+
+    .timeline::before {
+      left: 10px;
+    }
+
+    .content {
+      padding: 4vw;
+      margin-left: 30px;
+    }
   }
 </style>
 </head>
 <body>
 
 <h2>Minha Trajetória</h2>
+
 <div class="timeline">
-  <!-- Bolinhas + Balões -->
-  <div class="circle" style="top: 140px;"></div>
-  <div class="timeline-item"><div class="content"><h3>Título 1</h3><span>Jan 2020</span><p>Descrição breve do marco importante.</p></div></div>
 
-  <div class="circle" style="top: 280px;"></div>
-  <div class="timeline-item"><div class="content"><h3>Título 2</h3><span>Jun 2020</span><p>Outro marco relevante.</p></div></div>
+  <div class="timeline-block">
+    <div class="content">
+      <h3>Início da Jornada</h3>
+      <span>Jan 2020</span>
+      <p>O começo de uma trajetória cheia de desafios e aprendizados.</p>
+    </div>
+  </div>
 
-  <div class="circle" style="top: 420px;"></div>
-  <div class="timeline-item"><div class="content"><h3>Título 3</h3><span>Dez 2020</span><p>Mais um passo importante.</p></div></div>
+  <div class="timeline-block">
+    <div class="content">
+      <h3>Primeira Conquista</h3>
+      <span>Jun 2020</span>
+      <p>Um marco importante, consolidando o início de grandes projetos.</p>
+    </div>
+  </div>
 
-  <div class="circle" style="top: 560px;"></div>
-  <div class="timeline-item"><div class="content"><h3>Título 4</h3><span>Mai 2021</span><p>Conquista significativa.</p></div></div>
+  <div class="timeline-block">
+    <div class="content">
+      <h3>Expansão de Conhecimento</h3>
+      <span>Dez 2020</span>
+      <p>Investindo em novas habilidades e explorando novas oportunidades.</p>
+    </div>
+  </div>
 
-  <div class="circle" style="top: 700px;"></div>
-  <div class="timeline-item"><div class="content"><h3>Título 5</h3><span>Out 2021</span><p>Avanço na trajetória.</p></div></div>
+  <div class="timeline-block">
+    <div class="content">
+      <h3>Projeto de Destaque</h3>
+      <span>Mai 2021</span>
+      <p>Um dos maiores projetos realizados até o momento, com grande impacto.</p>
+    </div>
+  </div>
 
-  <div class="circle" style="top: 840px;"></div>
-  <div class="timeline-item"><div class="content"><h3>Título 6</h3><span>Mar 2022</span><p>Nova etapa importante.</p></div></div>
+  <div class="timeline-block">
+    <div class="content">
+      <h3>Reconhecimento</h3>
+      <span>Out 2021</span>
+      <p>Recebendo reconhecimento pelo trabalho e dedicação contínua.</p>
+    </div>
+  </div>
 
-  <div class="circle" style="top: 980px;"></div>
-  <div class="timeline-item"><div class="content"><h3>Título 7</h3><span>Set 2022</span><p>Outro marco relevante.</p></div></div>
+  <div class="timeline-block">
+    <div class="content">
+      <h3>Nova Etapa</h3>
+      <span>Mar 2022</span>
+      <p>Início de um novo ciclo com desafios mais complexos e inspiradores.</p>
+    </div>
+  </div>
 
-  <div class="circle" style="top: 1120px;"></div>
-  <div class="timeline-item"><div class="content"><h3>Título 8</h3><span>Jan 2023</span><p>Última conquista destacada.</p></div></div>
+  <div class="timeline-block">
+    <div class="content">
+      <h3>Inovação Constante</h3>
+      <span>Set 2022</span>
+      <p>Adotando novas tecnologias e metodologias para evoluir ainda mais.</p>
+    </div>
+  </div>
+
+  <div class="timeline-block">
+    <div class="content">
+      <h3>Futuro Brilhante</h3>
+      <span>Jan 2023</span>
+      <p>Com grandes conquistas, o futuro se mostra ainda mais promissor.</p>
+    </div>
+  </div>
+
 </div>
 
 <script>
-  const items = document.querySelectorAll('.timeline-item');
+  // Animação suave ao rolar
+  const blocks = document.querySelectorAll('.timeline-block');
 
-  const revealOnScroll = () => {
+  function revealOnScroll() {
     const triggerBottom = window.innerHeight * 0.85;
-    items.forEach(item => {
-      const boxTop = item.getBoundingClientRect().top;
-      if (boxTop < triggerBottom) {
-        item.classList.add('show');
-      } else {
-        item.classList.remove('show');
-      }
+    blocks.forEach(block => {
+      const boxTop = block.getBoundingClientRect().top;
+      if (boxTop < triggerBottom) block.classList.add('show');
     });
-  };
+  }
 
   window.addEventListener('scroll', revealOnScroll);
   revealOnScroll();
