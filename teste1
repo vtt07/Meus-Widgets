@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linha do Tempo</title>
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: transparent;
+    margin: 0;
+    padding: 40px;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #fd7014;
+    font-size: 28px;
+  }
+
+  .timeline {
+    position: relative;
+    max-width: 800px;
+    margin: auto;
+ ::before {
+    content: '';
+    position: absolute;
+    width: 4px;
+    background: #fd7014;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .timeline-item {
+    position: relative;
+    width: 50%;
+    padding: 20px;
+    opacity: 0;
+    transform: translateY(60px);
+    transition: all 0.8s ease-out;
+  }
+
+  .timeline-item.show {
+    opacity: 1;
+    transform: translateY(0);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+  }
+
+  .timeline-item:nth-child(odd) {
+    left: 0;
+    text-align: right;
+  }
+
+  .timeline-item:nth-child(even) {
+    left: 50%;
+    text-align: left;
+  }
+
+  .content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    display: inline-block;
+    max-width: 90%;
+  }
+
+  .content h3 {
+    margin: 0;
+    color: #fd7014;
+    font-size: 20px;
+  }
+
+  .content span {
+    font-size: 14px;
+    color: #777;
+  }
+
+  .content p {
+    margin-top: 10px;
+    color: #555;
+    font-size: 15px;
+  }
+</style>
+</head>
+<body>
+
+<h2>Minha Trajetória</h2>
+<div class="timeline">
+  <div class="timeline-item">
+    <div class="content">
+      <h3>Título 1</h3>
+      <span>Jan 2020</span>
+      <p>Breve descrição do marco importante na sua trajetória.</p>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="content">
+      <h3>Título 2</h3>
+      <span>Dez 2021</span>
+      <p>Outro marco importante com detalhes relevantes.</p>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="content">
+      <h3>Título 3</h3>
+      <span>Ago 2023</span>
+      <p>Mais um passo importante na sua jornada.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const items = document.querySelectorAll('.timeline-item');
+
+  const revealOnScroll = () => {
+    const triggerBottom = window.innerHeight * 0.85;
+    items.forEach(item => {
+      const boxTop = item.getBoundingClientRect().top;
+      if (boxTop < triggerBottom) {
+        item.classList.add('show');
+      }
+    });
+  };
+
+  window.addEventListener('scroll', revealOnScroll);
+  revealOnScroll();
+</script>
+
+</body>
+</html>
