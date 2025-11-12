@@ -3,30 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Linha do Tempo com Pontos</title>
+<title>Linha do Tempo Interativa</title>
 <style>
   body {
     font-family: 'Segoe UI', sans-serif;
-    background: #111; /* fundo escuro */
-    color: #fff;
+    background: transparent;
     margin: 0;
     padding: 40px;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 60px;
+    color: #fd7014;
+    font-size: 32px;
+    font-weight: bold;
+    position: relative;
+    z-index: 2;
   }
 
   .timeline {
     position: relative;
     max-width: 900px;
     margin: auto;
-    padding-top: 40px;
   }
 
   /* Linha central */
   .timeline::before {
     content: '';
-    position: absolute;
-    width: 4px;
-    background: #fd7014;
-    top: 0;
+    */
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
@@ -50,14 +55,14 @@
     width: 50%;
     padding: 20px;
     opacity: 0;
-    transform: translateY(80px);
+    transform: translateY(80px) scale(0.95);
     transition: all 0.8s ease-out;
-    z-index: 3;
+    z-index: 2;
   }
 
   .timeline-item.show {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 
   .timeline-item:nth-child(odd) {
@@ -72,13 +77,17 @@
 
   .content {
     background: #fff;
-    color: #333;
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
     display: inline-block;
     max-width: 80%;
-    position: relative;
+    transition: transform 0.3s ease;
+  }
+
+  .content:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.25);
   }
 
   .content h3 {
@@ -101,42 +110,37 @@
 </head>
 <body>
 
+<h2>Minha Trajetória</h2>
 <div class="timeline">
-  <!-- Item 1 -->
-  <div class="circle" style="top: 40px;"></div>
+  <!-- Bolinhas + Balões -->
+  <div class="circle" style="top: 140px;"></div>
   <div class="timeline-item"><div class="content"><h3>Título 1</h3><span>Jan 2020</span><p>Descrição breve do marco importante.</p></div></div>
 
-  <!-- Item 2 -->
-  <div class="circle" style="top: 160px;"></div>
+  <div class="circle" style="top: 280px;"></div>
   <div class="timeline-item"><div class="content"><h3>Título 2</h3><span>Jun 2020</span><p>Outro marco relevante.</p></div></div>
 
-  <!-- Item 3 -->
-  <div class="circle" style="top: 280px;"></div>
+  <div class="circle" style="top: 420px;"></div>
   <div class="timeline-item"><div class="content"><h3>Título 3</h3><span>Dez 2020</span><p>Mais um passo importante.</p></div></div>
 
-  <!-- Item 4 -->
-  <div class="circle" style="top: 400px;"></div>
+  <div class="circle" style="top: 560px;"></div>
   <div class="timeline-item"><div class="content"><h3>Título 4</h3><span>Mai 2021</span><p>Conquista significativa.</p></div></div>
 
-  <!-- Item 5 -->
-  <div class="circle" style="top: 520px;"></div>
+  <div class="circle" style="top: 700px;"></div>
   <div class="timeline-item"><div class="content"><h3>Título 5</h3><span>Out 2021</span><p>Avanço na trajetória.</p></div></div>
 
-  <!-- Item 6 -->
-  <div class="circle" style="top: 640px;"></div>
+  <div class="circle" style="top: 840px;"></div>
   <div class="timeline-item"><div class="content"><h3>Título 6</h3><span>Mar 2022</span><p>Nova etapa importante.</p></div></div>
 
-  <!-- Item 7 -->
-  <div class="circle" style="top: 760px;"></div>
+  <div class="circle" style="top: 980px;"></div>
   <div class="timeline-item"><div class="content"><h3>Título 7</h3><span>Set 2022</span><p>Outro marco relevante.</p></div></div>
 
-  <!-- Item 8 -->
-  <div class="circle" style="top: 880px;"></div>
+  <div class="circle" style="top: 1120px;"></div>
   <div class="timeline-item"><div class="content"><h3>Título 8</h3><span>Jan 2023</span><p>Última conquista destacada.</p></div></div>
 </div>
 
 <script>
   const items = document.querySelectorAll('.timeline-item');
+
   const revealOnScroll = () => {
     const triggerBottom = window.innerHeight * 0.85;
     items.forEach(item => {
@@ -148,6 +152,7 @@
       }
     });
   };
+
   window.addEventListener('scroll', revealOnScroll);
   revealOnScroll();
 </script>
